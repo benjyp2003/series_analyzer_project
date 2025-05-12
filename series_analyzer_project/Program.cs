@@ -39,7 +39,15 @@ namespace series_analyzer_project
             menu(numbers);
         }
 
-        
+        static void enterSeries()
+        {
+            Console.WriteLine("enter a new series: (with spaces between the numbers) ");
+            string str  = Console.ReadLine();
+            string[] strNumList = str.Split(' ');
+
+            convertToInt(strNumList);
+        }
+       
 
     }
 }
