@@ -20,15 +20,28 @@ namespace series_analyzer_project
 
         // run all the functions of this program.
         static void Run(string[] args)
-        {
-            
+        {          
                 if (validateInput(args))
                 {
-                    double[] numbers = ParseInput(args);
-                    validatePosNumbers(numbers);
-                    validateLength(numbers);
-                    showMenu();
-                    HandleMenuChoice(numbers);
+                    double[] numbers = ConverteStrTonumbers(args);
+                    if (validateLength3(numbers))
+                    {
+                        if (validatePosNumbers(numbers))
+                        {
+                            showMenu();
+                            HandleMenuChoice(numbers);
+                        }
+                        else
+                        {
+                            Console.WriteLine("ERROR: enter positive nombers only.");
+                            enterSeries();
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("ERROR: enter at least 3 numbers.");
+                        enterSeries();
+                    }
                 }
                 else
                 {
@@ -53,8 +66,8 @@ namespace series_analyzer_project
         }
 
 
-        // func that converts the series from string[] to int[] or double[]. (and validates that only numbers were givin)
-        static double[] ParseInput(string[] args)
+        // func that converts the series from string[] to int[] or double[]. 
+        static double[] ConverteStrTonumbers(string[] args)
         {
             double[] numbers = new double[args.Length];
             
@@ -75,27 +88,23 @@ namespace series_analyzer_project
 
 
         // valiadte that the user enterd at least 3 positive numbers.
-        static void validatePosNumbers(double[] numbers)
+        static bool validatePosNumbers(double[] numbers)
         {
             foreach (double num in numbers)
             {
                 if (num < 0)
                 {
-                    Console.WriteLine("ERROR. enter positive numbers only.");
-                    enterSeries();
+                    return false;
                 }
             }
+            return true;
         }
 
 
         //validate that the series has at least 3 numbers in it.
-        static void validateLength(double[] numbers)
+        static bool validateLength3(double[] numbers)
         {
-            if (numbers.Length < 3)
-            {
-                Console.WriteLine("ERROR. enter at least 3 numbers.");
-                enterSeries();
-            }
+            return numbers.Length >= 3;
         }
 
 
@@ -106,8 +115,9 @@ namespace series_analyzer_project
             string str = Console.ReadLine();
             string[] strNumList = str.Split(' ');
 
-            run(strNumList);
+            Run(strNumList);
         }
+
 
         // display the menu of opperations to the user.
         static void showMenu()
@@ -130,7 +140,6 @@ namespace series_analyzer_project
             Console.Write("Select an option: ");
         }
         
-
 
         // handle the output of the menu.
         static void HandleMenuChoice(double[] numbers)
