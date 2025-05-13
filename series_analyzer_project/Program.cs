@@ -22,7 +22,7 @@ namespace series_analyzer_project
             
                 if (validateInput(args))
                 {
-                    int[] numbers = convertArgsToInt(args);
+                    double[] numbers = convertArgsToIntDouble(args);
                     validatePosNumbers(numbers);
                     validateLength(numbers);
                     showMenu(numbers);
@@ -31,16 +31,17 @@ namespace series_analyzer_project
                 {
                     Console.WriteLine("ERROR: enter numbers only.");
                     enterSeries();
-                }
-            
+                }   
         }
 
-        // func that checks user enterd numbers only.
+
+      
+        // func that checks that the user enterd numbers only.
         static bool validateInput(string[] args)
         {
             for (int i = 0; i < args.Length; i++)
             {
-                if (!int.TryParse(args[i], out int num))  // checking if user put in numbers,
+                if (!int.TryParse(args[i], out _) && (!double.TryParse(args[i], out _)))  // checking if user put in numbers,
                 {
                     return false;
                 }
@@ -50,18 +51,20 @@ namespace series_analyzer_project
 
 
         // func that converts the series from string[] to int[]. (and validates that only numbers were givin)
-        static int[] convertArgsToInt(string[] args)
+        static double[] convertArgsToIntDouble(string[] args)
         {
-            int[] numbers = new int[args.Length];
-
+            double[] numbers = new double[args.Length];
+            
             for (int i = 0; i < args.Length; i++)
             {
-                numbers[i] = Convert.ToInt32(args[i]);
-            }
-
-            foreach (var item in numbers)
-            {
-                Console.WriteLine(item);
+                if (int.TryParse(args[i], out int num))
+                {
+                    numbers[i] = num;
+                }
+                else if (double.TryParse(args[i], out double doubleNum))
+                {
+                    numbers[i] = doubleNum;
+                }
             }
 
             return numbers;
@@ -69,9 +72,9 @@ namespace series_analyzer_project
 
 
         // valiadte that the user enterd at least 3 positive numbers.
-        static void validatePosNumbers(int[] numbers)
+        static void validatePosNumbers(double[] numbers)
         {
-            foreach (int num in numbers)
+            foreach (double num in numbers)
             {
                 if (num < 0)
                 {
@@ -82,7 +85,7 @@ namespace series_analyzer_project
         }
 
 
-        static void validateLength(int[] numbers)
+        static void validateLength(double[] numbers)
         {
             if (numbers.Length < 3)
             {
@@ -103,7 +106,7 @@ namespace series_analyzer_project
         }
 
         // display the menu of opperations to the user.
-        static void showMenu(int[] numbers)
+        static void showMenu(double[] numbers)
         {
             Console.WriteLine("welcome to The Series Analyzer! \n" +
                               "click a - to enter a series. (replace the current sereis) \n" +
@@ -112,7 +115,7 @@ namespace series_analyzer_project
                               "click d - to display the series in sorted order. (from low to high) \n" +
                               "click e - to display the max value of the series. \n" +
                               "click f - to display the min value of the series. \n" +
-                              "click g - to display thr average of thr series. \n" +
+                              "click g - to display the average of thr series. \n" +
                               "click h - to display the number of elements in the series. \n" +
                               "click i - to display the sum of the numbers in the series. \n" +
                               "click j - to exit the program.");
@@ -123,7 +126,7 @@ namespace series_analyzer_project
 
 
         // handle the output of the menu.
-        static void menuOutput(int[] numbers)
+        static void menuOutput(double[] numbers)
         {
             string choice = Console.ReadLine();
 
@@ -146,23 +149,23 @@ namespace series_analyzer_project
                     break;
 
                 case "e":
-                    maxVal(numbers); 
+                    showMax(numbers); 
                     break;
 
                 case "f":
-                    minVal(numbers);
+                    showMin(numbers);
                     break;
 
                 case "g":
-                    getAverage(numbers);
+                    showAverage(numbers);
                     break;
 
                 case "h":
-                    getLegth(numbers);
+                    showLegth(numbers);
                     break;
 
                 case "i":
-                    getSum(numbers);
+                    showSum(numbers);
                     break;
 
                 case "j":
@@ -178,9 +181,9 @@ namespace series_analyzer_project
         }
 
 
-        static void displaySeries(int[] numbers)
+        static void displaySeries(double[] numbers)
         {
-            foreach (int num in numbers)
+            foreach (double num in numbers)
             {
                 Console.Write($"{num} ");
             }
@@ -189,7 +192,8 @@ namespace series_analyzer_project
             showMenu(numbers);
         }
 
-        static void displayReverse(int[] numbers)
+
+        static void displayReverse(double[] numbers)
         {
             for (int i = numbers.Length -1; i > -1; i--)
             {
@@ -200,21 +204,29 @@ namespace series_analyzer_project
             showMenu(numbers);
         }
 
-        static void displaySorted(int[] numbers)
-        {
 
+
+        static void displaySorted(double[] numbers)
+        {
+            double[] sorted = bubbleSort(numbers);
+            foreach (double num in sorted)
+            {
+                Console.Write($"{num} ");
+            }
+            Console.WriteLine("");
+            showMenu(numbers);           
         }
 
-        static int[] bubbleSort(int[] numbers)
+        static double[] bubbleSort(double[] numbers)
         {
-            for (int i = 0; i < numbers.Length -1; i++)
+            for (int i = 0; i < numbers.Length ; i++)
             {
                 bool flag = true;
-                for (int j = i+1; j < numbers.Length -1 -i; j++)
+                for (int j = 0; j < numbers.Length -1 -i; j++)
                 {
                     if (numbers[j] > numbers[j+1])
                     {
-                        int temp = numbers[j];
+                        double temp = numbers[j];
                         numbers[j] = numbers[j+1];
                         numbers[j+1] = temp;
                         flag = false;
@@ -227,24 +239,96 @@ namespace series_analyzer_project
 
         }
 
-        static void maxVal(int[] numbers)
+
+
+        static void showMax(double[] numbers)
         {
+            Console.WriteLine($"max number in the series is {getMax(numbers)}");
+            showMenu(numbers);
         }
 
-        static void minVal(int[] numbers)
+        static double getMax(double[] numbers)
         {
+            double max = numbers[0];
+            foreach (double num in numbers)
+            {
+                if (num > max)
+                { max = num; }
+            }
+            return max;
         }
 
-        static void getAverage(int[] numbers)
+
+
+        static void showMin(double[] numbers)
         {
+            Console.WriteLine($"min number in the series is {getMin(numbers)}");
+            showMenu(numbers);
         }
 
-        static void getLegth(int[] numbers)
+        static double getMin(double[] numbers)
         {
+            double min = numbers[0];
+            foreach (double num in numbers)
+            {
+                if (num < min)
+                    { min = num; }
+            }
+            return min;
         }
 
-        static void getSum(int[] numbers)
+
+
+        static void showAverage(double[] numbers)
+        {
+            Console.WriteLine($"the average of the series is {getAverage(numbers)}");
+            showMenu(numbers);
+        }
+
+        static double getAverage(double[] numbers)
+        {
+            double count = 0, sum = 0;
+            foreach (double num in numbers)
+            {
+                count++;
+                sum += num;
+            }
+            return sum / count;
+        }
+
+
+
+        static void showLegth(double[] numbers)
+        {
+            Console.WriteLine($"series has {getLength(numbers)} numbers in it.");
+            showMenu(numbers);
+        }
+
+        static double getLength(double[] numbers)
+        {
+            double count = 0;
+            foreach (double num in numbers)
+            {
+                count++;
+            }
+            return count;
+        }
+
+
+
+        static void showSum(double[] numbers)
         { 
+            Console.WriteLine($"sum of the seireis is {getSum(numbers)}");
+            showMenu(numbers);
+        }
+
+        static double getSum(double[] numbers)
+        {
+            double sum = 0;
+            foreach (double num in numbers)
+                { sum += num; }
+
+            return sum;
         }
 
 
