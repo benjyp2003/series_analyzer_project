@@ -72,10 +72,10 @@ namespace series_analyzer_project
                 }
             }
 
-            menu(numbers);
+            showMenu(numbers);
         }
 
-        static void menu(int[] numbers)
+        static void showMenu(int[] numbers)
         {
             Console.WriteLine("welcome to The Series Analyzer! \n" +
                               "click a - to enter a series. (replace the current sereis) \n" +
@@ -84,19 +84,107 @@ namespace series_analyzer_project
                               "click d - to display the series in sorted order. (from low to high) \n" +
                               "click e - to display the max value of the series. \n" +
                               "click f - to display the min value of the series. \n" +
-                              "click g - to display thr avarege of thr series. \n" +
+                              "click g - to display thr average of thr series. \n" +
                               "click h - to display the number of elements in the series. \n" +
                               "click i - to display the sum of the numbers in the series. \n" +
                               "click j - to exit the program.");
 
-            string choice = Console.ReadLine();
-            output(choice, numbers);
+            menuOutput(numbers);
 
         }
 
-        static void output(string choice, int[] numbers)
+        static void menuOutput(int[] numbers)
         {
-            
+            string choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "a":
+                    enterSeries();
+                    break;
+
+                case "b":
+                    displaySeries(numbers); 
+                    break;
+
+                case "c":
+                    displayReverse(numbers);
+                    break;
+
+                case "d":
+                    displaySorted(numbers);
+                    break;
+
+                case "e":
+                    maxVal(numbers); 
+                    break;
+
+                case "f":
+                    minVal(numbers);
+                    break;
+
+                case "g":
+                    getAverage(numbers);
+                    break;
+
+                case "h":
+                    getLegth(numbers);
+                    break;
+
+                case "i":
+                    getSum(numbers);
+                    break;
+
+                case "j":
+                    Console.WriteLine("good bye (: ");
+                    break;
+
+                default:
+                    Console.WriteLine("ERROR. not valid input.");
+                    showMenu(numbers);
+                    break;
+
+            }
         }
+
+        static void displaySeries(int[] numbers)
+        {
+            foreach (int num in numbers)
+            {
+                Console.Write($"{num} ");
+            }
+
+            Console.WriteLine("");
+        }
+
+        static void displayReverse(int[] numbers)
+        {
+        }
+
+        static void displaySorted(int[] numbers)
+        {
+        }
+
+        static void maxVal(int[] numbers)
+        {
+        }
+
+        static void minVal(int[] numbers)
+        {
+        }
+
+        static void getAverage(int[] numbers)
+        {
+        }
+
+        static void getLegth(int[] numbers)
+        {
+        }
+
+        static void getSum(int[] numbers)
+        { 
+        }
+
+
     }
 }
