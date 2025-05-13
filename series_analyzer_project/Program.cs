@@ -159,6 +159,12 @@ namespace series_analyzer_project
 
         static void displayReverse(int[] numbers)
         {
+            for (int i = numbers.Length -1; i > -1; i--)
+            {
+                Console.Write($"{numbers[i]} ");
+            }
+
+            Console.WriteLine("");
         }
 
         static void displaySorted(int[] numbers)
