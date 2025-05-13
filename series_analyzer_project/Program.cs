@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,58 +12,65 @@ namespace series_analyzer_project
     {
         static void Main(string[] args)
         {
-            convertToInt(args);
+            run(args);
         }
 
-        // func that converts the series from string[] to int[]. (and validates that only numbers were givin)
-        static void convertToInt(string[] args)
+
+        // run all the functions.
+        static void run(string[] args)
         {
-            int[] numbers = new int[args.Length];
-
-            numbers = validInput(args, numbers);
             
-            validatePosNumbers(numbers);
+                if (validateInput(args))
+                {
+                    int[] numbers = convertArgsToInt(args);
+                    validatePosNumbers(numbers);
+                    validateLength(numbers);
+                    showMenu(numbers);
+                }
+                else
+                {
+                    Console.WriteLine("ERROR: enter numbers only.");
+                    enterSeries();
+                }
+            
         }
-
 
         // func that checks user enterd numbers only.
-        static int[] validInput(string[] args, int[] numbers)
+        static bool validateInput(string[] args)
         {
             for (int i = 0; i < args.Length; i++)
             {
-                if (int.TryParse(args[i], out int num))  // checking if user put in numbers,
+                if (!int.TryParse(args[i], out int num))  // checking if user put in numbers,
                 {
-                    numbers[i] = num;              // if he did, convert evry number to int and store them in "numbers".
+                    return false;
                 }
-                else                              // if he put enything else, we ask him to renter the series.
-                {
-                    Console.WriteLine("ERROR. enter numbers only! ");
-                    enterSeries();
-                }
+            }
+            return true;
+        }
+
+
+        // func that converts the series from string[] to int[]. (and validates that only numbers were givin)
+        static int[] convertArgsToInt(string[] args)
+        {
+            int[] numbers = new int[args.Length];
+
+            for (int i = 0; i < args.Length; i++)
+            {
+                numbers[i] = Convert.ToInt32(args[i]);
+            }
+
+            foreach (var item in numbers)
+            {
+                Console.WriteLine(item);
             }
 
             return numbers;
         }
 
-        // function that gets a number series from the user.
-        static void enterSeries()
-        {
-            Console.WriteLine("enter a new series: (with spaces between the numbers) ");
-            string str  = Console.ReadLine();
-            string[] strNumList = str.Split(' ');
 
-            convertToInt(strNumList);
-        }
-        
         // valiadte that the user enterd at least 3 positive numbers.
         static void validatePosNumbers(int[] numbers)
         {
-            if (numbers.Length < 3)
-            {
-                Console.WriteLine("ERROR. enter at least 3 numbers.");
-                enterSeries(); 
-            }
-
             foreach (int num in numbers)
             {
                 if (num < 0)
@@ -71,10 +79,30 @@ namespace series_analyzer_project
                     enterSeries();
                 }
             }
-
-            showMenu(numbers);
         }
 
+
+        static void validateLength(int[] numbers)
+        {
+            if (numbers.Length < 3)
+            {
+                Console.WriteLine("ERROR. enter at least 3 numbers.");
+                enterSeries();
+            }
+        }
+
+
+        // function that gets a number series from the user.
+        static void enterSeries()
+        {
+            Console.WriteLine("enter a new series: (with spaces between the numbers) ");
+            string str = Console.ReadLine();
+            string[] strNumList = str.Split(' ');
+
+            run(strNumList);
+        }
+
+        // display the menu of opperations to the user.
         static void showMenu(int[] numbers)
         {
             Console.WriteLine("welcome to The Series Analyzer! \n" +
@@ -93,6 +121,8 @@ namespace series_analyzer_project
 
         }
 
+
+        // handle the output of the menu.
         static void menuOutput(int[] numbers)
         {
             string choice = Console.ReadLine();
@@ -147,6 +177,7 @@ namespace series_analyzer_project
             }
         }
 
+
         static void displaySeries(int[] numbers)
         {
             foreach (int num in numbers)
@@ -155,6 +186,7 @@ namespace series_analyzer_project
             }
 
             Console.WriteLine("");
+            showMenu(numbers);
         }
 
         static void displayReverse(int[] numbers)
@@ -165,10 +197,34 @@ namespace series_analyzer_project
             }
 
             Console.WriteLine("");
+            showMenu(numbers);
         }
 
         static void displaySorted(int[] numbers)
         {
+
+        }
+
+        static int[] bubbleSort(int[] numbers)
+        {
+            for (int i = 0; i < numbers.Length -1; i++)
+            {
+                bool flag = true;
+                for (int j = i+1; j < numbers.Length -1 -i; j++)
+                {
+                    if (numbers[j] > numbers[j+1])
+                    {
+                        int temp = numbers[j];
+                        numbers[j] = numbers[j+1];
+                        numbers[j+1] = temp;
+                        flag = false;
+                    }
+                }
+                if (flag)
+                { return numbers; }
+            }
+            return numbers;
+
         }
 
         static void maxVal(int[] numbers)
