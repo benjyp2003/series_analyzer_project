@@ -286,6 +286,7 @@ namespace series_analyzer_project
         {
             Console.WriteLine($"min number in the series is {GetMin(numbers)}");
             ShowMenu();
+            HandleMenuChoice(numbers);
         }
 
         static double GetMin(double[] numbers)
@@ -342,7 +343,7 @@ namespace series_analyzer_project
 
         static void ShowSum(double[] numbers)
         { 
-            Console.WriteLine($"sum of the seireis is {GetSum(numbers)}");
+            Console.WriteLine($"sum of the sereis is {GetSum(numbers)}");
             ShowMenu();
             HandleMenuChoice(numbers);
         }
