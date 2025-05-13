@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,20 +14,21 @@ namespace series_analyzer_project
     {
         static void Main(string[] args)
         {
-            run(args);
+            Run(args);
         }
 
 
-        // run all the functions.
-        static void run(string[] args)
+        // run all the functions of this program.
+        static void Run(string[] args)
         {
             
                 if (validateInput(args))
                 {
-                    double[] numbers = convertArgsToIntDouble(args);
+                    double[] numbers = ParseInput(args);
                     validatePosNumbers(numbers);
                     validateLength(numbers);
-                    showMenu(numbers);
+                    showMenu();
+                    HandleMenuChoice(numbers);
                 }
                 else
                 {
@@ -41,7 +44,7 @@ namespace series_analyzer_project
         {
             for (int i = 0; i < args.Length; i++)
             {
-                if (!int.TryParse(args[i], out _) && (!double.TryParse(args[i], out _)))  // checking if user put in numbers,
+                if (!int.TryParse(args[i], out _) && (!double.TryParse(args[i], out _)))  // checking if user put in numbers (int ou double),
                 {
                     return false;
                 }
@@ -50,8 +53,8 @@ namespace series_analyzer_project
         }
 
 
-        // func that converts the series from string[] to int[]. (and validates that only numbers were givin)
-        static double[] convertArgsToIntDouble(string[] args)
+        // func that converts the series from string[] to int[] or double[]. (and validates that only numbers were givin)
+        static double[] ParseInput(string[] args)
         {
             double[] numbers = new double[args.Length];
             
@@ -85,6 +88,7 @@ namespace series_analyzer_project
         }
 
 
+        //validate that the series has at least 3 numbers in it.
         static void validateLength(double[] numbers)
         {
             if (numbers.Length < 3)
@@ -95,7 +99,7 @@ namespace series_analyzer_project
         }
 
 
-        // function that gets a number series from the user.
+        // function that gets a series of number from the user.
         static void enterSeries()
         {
             Console.WriteLine("enter a new series: (with spaces between the numbers) ");
@@ -106,27 +110,30 @@ namespace series_analyzer_project
         }
 
         // display the menu of opperations to the user.
-        static void showMenu(double[] numbers)
+        static void showMenu()
         {
-            Console.WriteLine("welcome to The Series Analyzer! \n" +
-                              "click a - to enter a series. (replace the current sereis) \n" +
-                              "click b - to display the series in the order it was enterd. \n" +
-                              "click c - to display the series in the reverse order it was enterd. \n" +
-                              "click d - to display the series in sorted order. (from low to high) \n" +
-                              "click e - to display the max value of the series. \n" +
-                              "click f - to display the min value of the series. \n" +
-                              "click g - to display the average of thr series. \n" +
-                              "click h - to display the number of elements in the series. \n" +
-                              "click i - to display the sum of the numbers in the series. \n" +
-                              "click j - to exit the program.");
-
-            menuOutput(numbers);
-
+            Console.WriteLine();
+            Console.WriteLine("╔══════════════════════════════════════════════════════════════╗");
+            Console.WriteLine("║                 Welcome to The Series Analyzer!              ║");
+            Console.WriteLine("╠══════════════════════════════════════════════════════════════╣");
+            Console.WriteLine("║  [a] Enter a new series (replace the current series)         ║");
+            Console.WriteLine("║  [b] Display the series in entered order                     ║");
+            Console.WriteLine("║  [c] Display the series in reverse order                     ║");
+            Console.WriteLine("║  [d] Display the series sorted (low to high)                 ║");
+            Console.WriteLine("║  [e] Show the max value of the series                        ║");
+            Console.WriteLine("║  [f] Show the min value of the series                        ║");
+            Console.WriteLine("║  [g] Show the average of the series                          ║");
+            Console.WriteLine("║  [h] Show the number of elements in the series               ║");
+            Console.WriteLine("║  [i] Show the sum of the series                              ║");
+            Console.WriteLine("║  [j] Exit the program                                        ║");
+            Console.WriteLine("╚══════════════════════════════════════════════════════════════╝\n");
+            Console.Write("Select an option: ");
         }
+        
 
 
         // handle the output of the menu.
-        static void menuOutput(double[] numbers)
+        static void HandleMenuChoice(double[] numbers)
         {
             string choice = Console.ReadLine();
 
@@ -174,11 +181,13 @@ namespace series_analyzer_project
 
                 default:
                     Console.WriteLine("ERROR. not valid input.");
-                    showMenu(numbers);
+                    showMenu();
+                    HandleMenuChoice(numbers);
                     break;
 
             }
         }
+
 
 
         static void displaySeries(double[] numbers)
@@ -189,7 +198,8 @@ namespace series_analyzer_project
             }
 
             Console.WriteLine("");
-            showMenu(numbers);
+            showMenu();
+            HandleMenuChoice(numbers);
         }
 
 
@@ -201,7 +211,8 @@ namespace series_analyzer_project
             }
 
             Console.WriteLine("");
-            showMenu(numbers);
+            showMenu();
+            HandleMenuChoice(numbers);
         }
 
 
@@ -214,7 +225,8 @@ namespace series_analyzer_project
                 Console.Write($"{num} ");
             }
             Console.WriteLine("");
-            showMenu(numbers);           
+            showMenu();
+            HandleMenuChoice(sorted);
         }
 
         static double[] bubbleSort(double[] numbers)
@@ -244,7 +256,8 @@ namespace series_analyzer_project
         static void showMax(double[] numbers)
         {
             Console.WriteLine($"max number in the series is {getMax(numbers)}");
-            showMenu(numbers);
+            showMenu();
+            HandleMenuChoice(numbers);
         }
 
         static double getMax(double[] numbers)
@@ -263,7 +276,7 @@ namespace series_analyzer_project
         static void showMin(double[] numbers)
         {
             Console.WriteLine($"min number in the series is {getMin(numbers)}");
-            showMenu(numbers);
+            showMenu();
         }
 
         static double getMin(double[] numbers)
@@ -282,7 +295,8 @@ namespace series_analyzer_project
         static void showAverage(double[] numbers)
         {
             Console.WriteLine($"the average of the series is {getAverage(numbers)}");
-            showMenu(numbers);
+            showMenu();
+            HandleMenuChoice(numbers);
         }
 
         static double getAverage(double[] numbers)
@@ -301,7 +315,8 @@ namespace series_analyzer_project
         static void showLegth(double[] numbers)
         {
             Console.WriteLine($"series has {getLength(numbers)} numbers in it.");
-            showMenu(numbers);
+            showMenu();
+            HandleMenuChoice(numbers);
         }
 
         static double getLength(double[] numbers)
@@ -319,7 +334,8 @@ namespace series_analyzer_project
         static void showSum(double[] numbers)
         { 
             Console.WriteLine($"sum of the seireis is {getSum(numbers)}");
-            showMenu(numbers);
+            showMenu();
+            HandleMenuChoice(numbers);
         }
 
         static double getSum(double[] numbers)
@@ -330,7 +346,6 @@ namespace series_analyzer_project
 
             return sum;
         }
-
 
     }
 }
